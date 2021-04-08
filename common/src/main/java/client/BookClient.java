@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * 测试一下呢
+ * 测试一下
  */
 @FeignClient(name="book")
 public interface BookClient {
@@ -19,4 +19,5 @@ public interface BookClient {
     @GetMapping("/book/selById/{id}")
     Book selById(@PathVariable("id") Integer id);
 
+    public void test();
 }

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Book implements Serializable{
+    
+    private String demo;
+    
     private Integer id;
 
     private String mainType;

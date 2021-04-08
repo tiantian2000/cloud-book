@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nju.book.shop.mapper.OrderItemsMapper">
+  <resultMap id="BaseResultMap" type="com.nju.book.shop.model.OrderItems">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="book_id" jdbcType="INTEGER" property="bookId" />
+    <result column="price" jdbcType="REAL" property="price" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+  </resultMap>
+  <resultMap id="connectionMap" type="com.nju.book.shop.model.OrderItems" extends="BaseResultMap">
+    <!-- 一对一关联 -->
+    <!--
+   javaType: 需要封装的类名
+   property:需要封装的类的对象名
+   column: 两张表的关联字段名
+-->
+   <!-- <association property="book" column="book_id" javaType="com.nju.book.shop.model.Book">
+      <id column="bid" jdbcType="INTEGER" property="id" />
+      <result column="bname" jdbcType="VARCHAR" property="bname" />
+      <result column="cur_price" jdbcType="REAL" property="curPrice" />
+      <result column="picture" jdbcType="VARCHAR" property="picture" />
+    </association>-->
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orderitems
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.nju.book.shop.model.OrderItems">
+    insert into orderitems (id, order_id, book_id, 
+      price, num)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{bookId,jdbcType=INTEGER}, 
+      #{price,jdbcType=REAL}, #{num,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nju.book.shop.model.OrderItems">
+    update orderitems
+    set order_id = #{orderId,jdbcType=INTEGER},
+      book_id = #{bookId,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL},
+      num = #{num,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, order_id, book_id, price, num
+    from orderitems
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, order_id, book_id, price, num
+    from orderitems
+  </select>
+  <select id="selectByOrder" parameterType="Integer" resultMap="connectionMap">
+    select oi.id, oi.order_id, oi.book_id, oi.price, oi.num,
+    b.id bid, b.bname,b.cur_price, b.picture
+    from orderitems oi
+    inner join book b on oi.book_id=b.id
+    where oi.order_id=#{orderId}
+  </select>
+</mapper>
